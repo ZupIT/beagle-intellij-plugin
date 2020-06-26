@@ -16,7 +16,7 @@
 
 subprojects {
     group "br.com.zup.beagle"
-    version "1.0.0-RC1"
+    version "1.0.0"
     repositories {
         jcenter()
         mavenLocal()
