@@ -9,4 +9,4 @@ Questions? Head to our [FAQ](./FAQ.md) where you might find some answers.
 
 ## Beagle contribution guidelines
 
-Please refer to [beagle's CONTRIBUTING.md](https://github.com/ZupIT/beagle/blob/master/CONTRIBUTING.md) for details on our guidelines.
+Please refer to [beagle's CONTRIBUTING.md](./CONTRIBUTING.md) for details on our guidelines.
