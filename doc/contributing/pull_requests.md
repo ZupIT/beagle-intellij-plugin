@@ -4,7 +4,7 @@
   that relates to your submission. You don't want to duplicate effort.
 1. Be sure that an issue describes the problem you're fixing, or documents the design for the feature you'd like to add.
   Discussing the design up front helps to ensure that we're ready to accept your work.
-1. Fork the ZupIT/beagle repo.
+1. Fork the ZupIT/beagle-intellij-plugin repo.
 1. Make your changes in a new git branch:
 
      ```shell
@@ -12,9 +12,9 @@
      ```
 
 1. Create your patch, **including appropriate test cases**.
-1. Follow our [Coding Rules](/doc/contributing/coding_rules.md).
+1. Follow our [Coding Rules](./coding_rules.md).
 1. Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](/doc/contributing/commits.md). Adherence to these conventions
+  [commit message conventions](./commits.md). Adherence to these conventions
   is necessary because release notes are automatically generated from these messages.
 
      ```shell
