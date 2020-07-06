@@ -33,5 +33,6 @@
         <configurationType implementation="br.com.zup.beagle.plugin.runner.BeagleRunConfigurationType"/>
     </extensions>
     <depends>org.jetbrains.kotlin</depends>
+    <depends>com.intellij.modules.java</depends>
     <idea-version since-build="191"/>
 </idea-plugin>
