@@ -31,6 +31,7 @@
         <codeInsight.lineMarkerProvider language="JAVA"
                                         implementationClass="br.com.zup.beagle.plugin.marker.RunLineMarker"/>
         <configurationType implementation="br.com.zup.beagle.plugin.runner.BeagleRunConfigurationType"/>
+        <errorHandler implementation="br.com.zup.beagle.plugin.report.ErrorReport"/>
     </extensions>
     <depends>org.jetbrains.kotlin</depends>
     <depends>com.intellij.modules.java</depends>
