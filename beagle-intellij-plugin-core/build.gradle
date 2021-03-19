@@ -31,7 +31,7 @@ publishPlugin {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "br.com.zup.beagle:framework:1.0.0"
+    implementation "br.com.zup.beagle:framework:1.6.0"
     implementation "org.java-websocket:Java-WebSocket:1.4.0"
     implementation "org.slf4j:slf4j-simple:1.7.25"
 }
