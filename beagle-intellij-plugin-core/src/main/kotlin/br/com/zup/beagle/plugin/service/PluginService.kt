@@ -32,6 +32,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import org.apache.commons.lang3.StringUtils
+import kotlin.script.experimental.jvm.util.classPathFromTypicalResourceUrls
 
 class PluginService(private val project: Project) {
 
@@ -76,7 +77,7 @@ class PluginService(private val project: Project) {
         }
     }
 
-    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).classPath.map { it.toURI().path }
+    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).pluginClassLoader.classPathFromTypicalResourceUrls().map { it.toURI().path }
 
     fun stopRunningCustomRunConfigurations() {
         val descriptors = this.executionManager.getDescriptors {

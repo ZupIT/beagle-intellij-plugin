@@ -33,7 +33,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiJavaFile
 import com.intellij.util.lang.UrlClassLoader
 import org.apache.commons.lang3.StringUtils
-import org.jetbrains.kotlin.idea.refactoring.toPsiFile
+import org.jetbrains.kotlin.idea.core.util.toPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.lang.reflect.Method
@@ -52,7 +52,7 @@ open class JsonConverterUtil(private val project: Project) {
             if (this is ObjectNode && this.has("platform")) {
                 this.get("child").also {
                     this.removeAll()
-                    this.setAll(it as ObjectNode)
+                    this.setAll<JsonNode>(it as ObjectNode)
                 }
             }
             this.forEach { it.unwrapPlatform() }

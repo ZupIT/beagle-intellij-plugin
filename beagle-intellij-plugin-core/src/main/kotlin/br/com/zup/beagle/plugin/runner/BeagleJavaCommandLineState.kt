@@ -52,7 +52,7 @@ open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private
         params.mainClass = SocketServer::class.java.name.plus("Kt")
         params.charset = Charsets.UTF_8
         params.jdk = ProjectRootManager.getInstance(this.environment.project).projectSdk
-        params.classPath.addAll(this.pluginService.getPluginClassPath())
+        params.classPath.addAll(this.pluginService.getPluginClassPath().toList())
         return params
     }
 
@@ -77,8 +77,8 @@ open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private
         }
 
     open fun compileAndExecuteJsonConverter() {
-        ProjectTaskManager.getInstance(this.environment.project).buildAllModules {
-            if (!it.isAborted && it.errors == 0) {
+        ProjectTaskManager.getInstance(this.environment.project).buildAllModules().onProcessed {
+            if (it.isAborted.not() and it.hasErrors().not()) {
                 this.jsonConverterService.buildDataAndSendToSocket(this.virtualFile, this.methodName, this.console!!)
             } else {
                 this.console!!.print("\nError on building project\n", ConsoleViewContentType.ERROR_OUTPUT)

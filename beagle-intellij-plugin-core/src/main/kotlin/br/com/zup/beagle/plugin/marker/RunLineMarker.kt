@@ -51,12 +51,12 @@ open class RunLineMarker : LineMarkerProvider {
             }
             val textRange = TextRange(psiElement.textRange.endOffset + 1, psiElement.textRange.endOffset + 2)
             return LineMarkerInfo(psiElement, textRange, BeagleIcons.BEAGLE_ICON, { "Run Beagle Plugin" },
-                navigationHandler, GutterIconRenderer.Alignment.CENTER)
+                navigationHandler, GutterIconRenderer.Alignment.CENTER, { "Run Beagle Plugin" })
         }
         return null
     }
 
-    override fun collectSlowLineMarkers(elements: MutableList<PsiElement>, result: MutableCollection<LineMarkerInfo<PsiElement>>) {
+    override fun collectSlowLineMarkers(elements: MutableList<out PsiElement>, result: MutableCollection<in LineMarkerInfo<*>>) {
         result.addAll(elements.mapNotNull { createLineMarkerInfo(it) })
     }
 
