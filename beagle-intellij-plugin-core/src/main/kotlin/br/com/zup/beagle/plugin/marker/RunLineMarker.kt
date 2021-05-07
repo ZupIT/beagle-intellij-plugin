@@ -51,7 +51,7 @@ open class RunLineMarker : LineMarkerProvider {
             }
             val textRange = TextRange(psiElement.textRange.endOffset + 1, psiElement.textRange.endOffset + 2)
             return LineMarkerInfo(psiElement, textRange, BeagleIcons.BEAGLE_ICON, { "Run Beagle Plugin" },
-                navigationHandler, GutterIconRenderer.Alignment.CENTER, { "Run Beagle Plugin" })
+                navigationHandler, GutterIconRenderer.Alignment.CENTER, {"Run Beagle Plugin"})
         }
         return null
     }

@@ -36,8 +36,8 @@ import kotlin.script.experimental.jvm.util.classPathFromTypicalResourceUrls
 
 class PluginService(private val project: Project) {
 
+    private val stopRunner = StopRunning(this.project)
     private val runnerManager = RunManager.getInstance(this.project)
-    private val executionManager = ExecutionManagerImpl.getInstance(this.project)
     private val virtualFileManager = VirtualFileManager.getInstance()
     private val plugin = PluginManager.getPlugin(PluginId.getId(BEAGLE_PLUGIN_ID))!!
 
@@ -53,7 +53,7 @@ class PluginService(private val project: Project) {
 
     fun runPlugin(clazz: VirtualFile?, methodName: String?) {
         if (clazz != null && StringUtils.isNotBlank(methodName)) {
-            stopRunningCustomRunConfigurations()
+            stopRunner.stopRunningCustomRunConfigurations()
             val customRunConfigurationType = BeagleRunConfigurationType()
             val configurationName = customRunConfigurationType.getRunConfigurationName(clazz.name, methodName!!)
             var configurationAndSettings = this.runnerManager.findConfigurationByName(configurationName)
@@ -79,14 +79,5 @@ class PluginService(private val project: Project) {
 
     fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).pluginClassLoader.classPathFromTypicalResourceUrls().map { it.toURI().path }
 
-    fun stopRunningCustomRunConfigurations() {
-        val descriptors = this.executionManager.getDescriptors {
-            it.configuration is BeagleRunConfiguration
-        }
-        descriptors.forEach {
-            if (!it.processHandler!!.isProcessTerminated) {
-                it.processHandler!!.destroyProcess()
-            }
-        }
-    }
+
 }
