@@ -77,7 +77,7 @@ class PluginService(private val project: Project) {
         }
     }
 
-    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).pluginClassLoader.classPathFromTypicalResourceUrls().map { it.toURI().path }
+    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).classPath.map { it.toURI().path }
 
 
 }
