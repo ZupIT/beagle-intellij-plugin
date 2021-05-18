@@ -16,7 +16,7 @@
 
 subprojects {
     group "br.com.zup.beagle"
-    version "1.0.2"
+    version System.getenv("PLUGIN_VERSION")?.replace("refs/tags/", "") ?:"1.0.0"
     repositories {
         jcenter()
         mavenLocal()
