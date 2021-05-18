@@ -35,6 +35,8 @@ import com.intellij.openapi.vfs.VirtualFileManager
 import org.apache.commons.lang3.StringUtils
 import kotlin.script.experimental.jvm.util.classPathFromTypicalResourceUrls
 import java.io.File
+import java.net.URI
+import java.nio.file.Paths
 import java.util.ArrayList
 
 class PluginService(private val project: Project) {
@@ -80,6 +82,5 @@ class PluginService(private val project: Project) {
         }
     }
 
-    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).classPath.map { it.toURI().path }
-
+    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).classPath.map { Paths.get(it.toURI()).toAbsolutePath().toString() }
 }
