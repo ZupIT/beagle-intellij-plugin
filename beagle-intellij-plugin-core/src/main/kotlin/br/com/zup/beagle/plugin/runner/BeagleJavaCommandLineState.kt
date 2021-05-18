@@ -52,10 +52,17 @@ open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private
         params.mainClass = SocketServer::class.java.name.plus("Kt")
         params.charset = Charsets.UTF_8
         params.jdk = ProjectRootManager.getInstance(this.environment.project).projectSdk
-        params.classPath.addAll(this.pluginService.getPluginClassPath().toList())
+        params.classPath.addAll(getClassPathNormalized())
         return params
     }
 
+    private fun getClassPathNormalized() : ArrayList<String>{
+        val classPath = ArrayList<String>()
+        this.pluginService.getPluginClassPath().toList().forEach{
+            classPath.add(it.removePrefix("/"))
+        }
+        return classPath
+    }
     override fun createConsole(executor: Executor) = super.createConsole(executor).also { this.console = it }
 
     override fun execute(executor: Executor, runner: ProgramRunner<*>) =
