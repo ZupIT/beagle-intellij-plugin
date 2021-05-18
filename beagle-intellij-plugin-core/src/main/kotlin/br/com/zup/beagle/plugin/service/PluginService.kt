@@ -29,10 +29,13 @@ import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.text.Strings
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import org.apache.commons.lang3.StringUtils
 import kotlin.script.experimental.jvm.util.classPathFromTypicalResourceUrls
+import java.io.File
+import java.util.ArrayList
 
 class PluginService(private val project: Project) {
 
@@ -77,7 +80,32 @@ class PluginService(private val project: Project) {
         }
     }
 
-    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).classPath.map { it.toURI().path }
+//    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).classPath.map { it.toURI().path }
 
-
+    fun getClassPath(): List<String> {
+        val path: File = this.plugin.pluginPath.toFile()
+        if (!path.isDirectory) {
+            return listOf(path).map { it.toURI().path }
+        }
+        val result: MutableList<File> = ArrayList()
+        val classesDir = File(path, "classes")
+        if (classesDir.exists()) {
+            result.add(classesDir)
+        }
+        val files = File(path, "lib").listFiles()
+        if (files == null || files.size <= 0) {
+            return result.map { it.toURI().path }
+        }
+        for (f in files) {
+            if (f.isFile) {
+                val name = f.name
+                if (Strings.endsWithIgnoreCase(name, ".jar") || Strings.endsWithIgnoreCase(name, ".zip")) {
+                    result.add(f)
+                }
+            } else {
+                result.add(f)
+            }
+        }
+        return result.map { it.toURI().path }
+    }
 }
