@@ -23,3 +23,4 @@ jobs:
                 run: ./gradlew beagle-intellij-plugin-core:publishPlugin
                 env:
                     JETBRAINS_TOKEN: ${{ secrets.JETBRAINS_TOKEN }}
+                    PLUGIN_VERSION: ${{ github.REF }}
