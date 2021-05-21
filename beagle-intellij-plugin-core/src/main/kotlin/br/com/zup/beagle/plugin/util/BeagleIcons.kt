@@ -23,6 +23,6 @@ open class BeagleIcons {
 
     companion object {
         private fun load(path: String): Icon = IconLoader.getIcon(path, BeagleIcons::class.java)
-        val BEAGLE_ICON = load("/icons/beagle_icon.jpg")
+        val BEAGLE_ICON = load("/icons/plugin_icon.svg")
     }
 }

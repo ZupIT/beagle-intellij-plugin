@@ -19,32 +19,26 @@ package br.com.zup.beagle.plugin.service
 import br.com.zup.beagle.plugin.runner.BeagleConfigurationFactory
 import br.com.zup.beagle.plugin.runner.BeagleRunConfiguration
 import br.com.zup.beagle.plugin.runner.BeagleRunConfigurationType
+import br.com.zup.beagle.plugin.util.ClassPath
 import br.com.zup.beagle.plugin.util.CustomVirtualFileListener
 import com.intellij.execution.ProgramRunnerUtil
 import com.intellij.execution.RunManager
 import com.intellij.execution.executors.DefaultRunExecutor
-import com.intellij.execution.impl.ExecutionManagerImpl
-import com.intellij.ide.plugins.IdeaPluginDescriptorImpl
-import com.intellij.ide.plugins.PluginManager
+import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.text.Strings
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import org.apache.commons.lang3.StringUtils
-import kotlin.script.experimental.jvm.util.classPathFromTypicalResourceUrls
-import java.io.File
-import java.net.URI
 import java.nio.file.Paths
-import java.util.ArrayList
 
 class PluginService(private val project: Project) {
 
     private val stopRunner = StopRunning(this.project)
     private val runnerManager = RunManager.getInstance(this.project)
     private val virtualFileManager = VirtualFileManager.getInstance()
-    private val plugin = PluginManager.getPlugin(PluginId.getId(BEAGLE_PLUGIN_ID))!!
+    private val plugin = PluginManagerCore.getPlugin(PluginId.getId(BEAGLE_PLUGIN_ID))!!
 
     init {
         this.virtualFileManager.addVirtualFileListener(CustomVirtualFileListener(this.project))
@@ -82,5 +76,5 @@ class PluginService(private val project: Project) {
         }
     }
 
-    fun getPluginClassPath() = (this.plugin as IdeaPluginDescriptorImpl).classPath.map { Paths.get(it.toURI()).toAbsolutePath().toString() }
+    fun getPluginClassPath() = ClassPath.getClassPath(this.plugin).map { Paths.get(it.toURI()).toAbsolutePath().toString() }
 }

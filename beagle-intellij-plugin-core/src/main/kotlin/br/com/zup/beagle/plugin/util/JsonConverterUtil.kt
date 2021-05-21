@@ -37,6 +37,7 @@ import org.jetbrains.kotlin.idea.core.util.toPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.lang.reflect.Method
+import java.nio.file.Paths
 
 open class JsonConverterUtil(private val project: Project) {
 
@@ -92,9 +93,9 @@ open class JsonConverterUtil(private val project: Project) {
         return null
     }
 
-    private fun getClassLoader() = UrlClassLoader.build().urls(
+    private fun getClassLoader() = UrlClassLoader.build().files(
         OrderEnumerator.orderEntries(this.project).recursively().classes().pathsList.pathList
-            .map { File(FileUtil.toSystemIndependentName(it)).toURI().toURL() }
+            .map { Paths.get(File(FileUtil.toSystemIndependentName(it)).toURI()) }
     ).get()
 
 

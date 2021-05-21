@@ -16,8 +16,8 @@
 
 package br.com.zup.beagle.plugin.runner
 
+import com.intellij.ide.highlighter.JavaClassFileType
 import com.intellij.ide.util.TreeFileChooserFactory
-import com.intellij.openapi.fileTypes.StdFileTypes
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
@@ -36,7 +36,7 @@ open class BeagleSettingsEditor(private val project: Project, private var conten
     init {
         this.clazzExplorer.addActionListener {
             val fileChooser = TreeFileChooserFactory.getInstance(this.project)
-                .createFileChooser("Select class to run Beagle Plugin", null, StdFileTypes.CLASS, null)
+                .createFileChooser("Select class to run Beagle Plugin", null, JavaClassFileType.INSTANCE, null)
             fileChooser.showDialog()
             if (fileChooser.selectedFile != null) {
                 this.selectedFile = fileChooser.selectedFile!!.virtualFile

@@ -20,7 +20,6 @@ import br.com.zup.beagle.plugin.service.JsonConverterService
 import br.com.zup.beagle.plugin.service.PluginService
 import br.com.zup.beagle.plugin.socket.SocketServer
 import com.google.common.base.Charsets
-import com.intellij.compiler.impl.ProjectCompileScope
 import com.intellij.execution.ExecutionResult
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.JavaCommandLineState
@@ -31,13 +30,9 @@ import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.ConsoleView
 import com.intellij.execution.ui.ConsoleViewContentType
 import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.compiler.CompileContext
-import com.intellij.openapi.compiler.CompileStatusNotification
-import com.intellij.openapi.compiler.CompilerManager
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.task.ProjectTaskManager
-import com.intellij.task.ProjectTaskNotification
 
 
 open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private val virtualFile: VirtualFile?, private val methodName: String?) : JavaCommandLineState(environment) {
@@ -52,17 +47,9 @@ open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private
         params.mainClass = SocketServer::class.java.name.plus("Kt")
         params.charset = Charsets.UTF_8
         params.jdk = ProjectRootManager.getInstance(this.environment.project).projectSdk
-        params.classPath.addAll(this.pluginService.getPluginClassPath().toList())
+        params.classPath.addAll(this.pluginService.getPluginClassPath())
         return params
     }
-
-//    private fun getClassPathNormalized() : ArrayList<String>{
-//        val classPath = ArrayList<String>()
-//        this.pluginService.getPluginClassPath().toList().forEach{
-//            classPath.add(it.removePrefix("/"))
-//        }
-//        return classPath
-//    }
 
     override fun createConsole(executor: Executor) = super.createConsole(executor).also { this.console = it }
 

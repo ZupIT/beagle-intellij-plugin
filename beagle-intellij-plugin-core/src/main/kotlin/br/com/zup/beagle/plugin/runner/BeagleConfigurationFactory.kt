@@ -20,8 +20,13 @@ import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationType
 import com.intellij.execution.configurations.RunConfiguration
 import com.intellij.openapi.project.Project
+import java.util.*
 
 open class BeagleConfigurationFactory(type: ConfigurationType) : ConfigurationFactory(type) {
+
+    override fun getId(): String {
+        return UUID.randomUUID().toString()
+    }
 
     override fun createTemplateConfiguration(project: Project): RunConfiguration = BeagleRunConfiguration(project, this, type.displayName)
 }
