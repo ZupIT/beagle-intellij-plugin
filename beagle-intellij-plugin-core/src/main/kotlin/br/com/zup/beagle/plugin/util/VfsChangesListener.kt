@@ -24,21 +24,29 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileEvent
 import com.intellij.openapi.vfs.VirtualFileListener
+import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.vfs.newvfs.BulkFileListener
+import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 
-class CustomVirtualFileListener(private val project: Project) : VirtualFileListener {
+class VfsChangesListener(private val project: Project)  {
 
     private val executionManager = ExecutionManagerImpl.getInstance(this.project)
 
-    override fun contentsChanged(event: VirtualFileEvent) {
-        if (event.isFromSave && JsonConverterUtil.AVAILABLE_EXTENSIONS.contains(event.file.extension)) {
-            val runConfigurationMap = HashMap<VirtualFile, BeagleRunConfiguration>()
-            val descriptors = this.executionManager.getDescriptors { filterRunningConfigurationsAndSetRunConfigurationToRunConfigurationsMap(it, runConfigurationMap) }
-            if (runConfigurationMap.containsKey(event.file) && checkIfDescriptorIsRunning(descriptors)) {
-                val customRunConfiguration = (runConfigurationMap[event.file] as BeagleRunConfiguration)
-                customRunConfiguration.javaCommandLineState!!.compileAndExecuteJsonConverter()
+    fun observerContentChange() {
+        this.project.messageBus.connect().subscribe(VirtualFileManager.VFS_CHANGES, object : BulkFileListener {
+            override fun after(events: MutableList<out VFileEvent>) {
+                events.filter { it.isFromSave && JsonConverterUtil.AVAILABLE_EXTENSIONS.contains(it.file?.extension) }
+                    .forEach { event ->
+                        val runConfigurationMap = HashMap<VirtualFile, BeagleRunConfiguration>()
+                        val descriptors = executionManager.getDescriptors { filterRunningConfigurationsAndSetRunConfigurationToRunConfigurationsMap(it, runConfigurationMap) }
+                        if (runConfigurationMap.containsKey(event.file) && checkIfDescriptorIsRunning(descriptors)) {
+                            val customRunConfiguration = (runConfigurationMap[event.file] as BeagleRunConfiguration)
+                            customRunConfiguration.javaCommandLineState!!.compileAndExecuteJsonConverter()
+                        }
+                    }
+                super.after(events)
             }
-        }
-        super.contentsChanged(event)
+        })
     }
 
     private fun checkIfDescriptorIsRunning(descriptors: List<RunContentDescriptor>) = descriptors.isNotEmpty() && !descriptors[0].processHandler!!.isProcessTerminated

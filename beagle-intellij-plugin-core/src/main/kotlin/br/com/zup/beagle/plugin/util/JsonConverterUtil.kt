@@ -93,10 +93,18 @@ open class JsonConverterUtil(private val project: Project) {
         return null
     }
 
-    private fun getClassLoader() = UrlClassLoader.build().files(
+    private fun getClassLoader() = UrlClassLoader.build().urls(
         OrderEnumerator.orderEntries(this.project).recursively().classes().pathsList.pathList
-            .map { Paths.get(File(FileUtil.toSystemIndependentName(it)).toURI()) }
+            .map { File(FileUtil.toSystemIndependentName(it)).toURI().toURL() }
     ).get()
+
+// The method below is an update to the new implementation of the getClassLoader method, as the urls method used in
+// the getClassLoader method has been discontinued in the intellij 2021.1 version.
+//
+//    private fun getClassLoader() = UrlClassLoader.build().files(
+//        OrderEnumerator.orderEntries(this.project).recursively().classes().pathsList.pathList
+//            .map { Paths.get(File(FileUtil.toSystemIndependentName(it)).toURI()) }
+//    ).get()
 
 
     private fun isValidMethodWithClassInstance(virtualFile: VirtualFile, psiFile: PsiFile, methodWithClassInstance: MethodWithClassInstance?, console: ConsoleView): Boolean {

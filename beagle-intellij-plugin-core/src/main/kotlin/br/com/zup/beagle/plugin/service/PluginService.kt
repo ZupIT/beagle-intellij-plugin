@@ -19,8 +19,9 @@ package br.com.zup.beagle.plugin.service
 import br.com.zup.beagle.plugin.runner.BeagleConfigurationFactory
 import br.com.zup.beagle.plugin.runner.BeagleRunConfiguration
 import br.com.zup.beagle.plugin.runner.BeagleRunConfigurationType
+import br.com.zup.beagle.plugin.runner.StopProcess
 import br.com.zup.beagle.plugin.util.ClassPath
-import br.com.zup.beagle.plugin.util.CustomVirtualFileListener
+import br.com.zup.beagle.plugin.util.VfsChangesListener
 import com.intellij.execution.ProgramRunnerUtil
 import com.intellij.execution.RunManager
 import com.intellij.execution.executors.DefaultRunExecutor
@@ -29,19 +30,18 @@ import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.VirtualFileManager
 import org.apache.commons.lang3.StringUtils
 import java.nio.file.Paths
 
+
 class PluginService(private val project: Project) {
 
-    private val stopRunner = StopRunning(this.project)
     private val runnerManager = RunManager.getInstance(this.project)
-    private val virtualFileManager = VirtualFileManager.getInstance()
+    private val vfsChangesListener = VfsChangesListener(this.project)
     private val plugin = PluginManagerCore.getPlugin(PluginId.getId(BEAGLE_PLUGIN_ID))!!
 
     init {
-        this.virtualFileManager.addVirtualFileListener(CustomVirtualFileListener(this.project))
+        vfsChangesListener.observerContentChange()
     }
 
     companion object {
@@ -52,7 +52,7 @@ class PluginService(private val project: Project) {
 
     fun runPlugin(clazz: VirtualFile?, methodName: String?) {
         if (clazz != null && StringUtils.isNotBlank(methodName)) {
-            stopRunner.stopRunningCustomRunConfigurations()
+            StopProcess.stopRunningCustomRunConfigurations(project)
             val customRunConfigurationType = BeagleRunConfigurationType()
             val configurationName = customRunConfigurationType.getRunConfigurationName(clazz.name, methodName!!)
             var configurationAndSettings = this.runnerManager.findConfigurationByName(configurationName)

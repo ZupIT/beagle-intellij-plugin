@@ -16,7 +16,6 @@
 
 package br.com.zup.beagle.plugin.runner
 
-import br.com.zup.beagle.plugin.service.StopRunning
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ModuleBasedConfiguration
@@ -42,7 +41,6 @@ open class BeagleRunConfiguration(project: Project, factory: ConfigurationFactor
         private const val HOT_RELOAD = "enableHotReload"
     }
 
-    private val stopRunning = StopRunning(this.project)
     var clazzToRunPlugin: VirtualFile? = null
     var methodName: String? = null
     var enableHotReloadOnFileSaved: Boolean = true
@@ -51,7 +49,7 @@ open class BeagleRunConfiguration(project: Project, factory: ConfigurationFactor
     override fun getConfigurationEditor() = BeagleSettingsEditor(this.project, JPanel(), TextFieldWithBrowseButton(), JTextField(), JCheckBox())
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
-        this.stopRunning.stopRunningCustomRunConfigurations()
+        StopProcess.stopRunningCustomRunConfigurations(project)
         val commandLineState = BeagleJavaCommandLineState(environment, clazzToRunPlugin, methodName)
         val textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(this.project)
         commandLineState.consoleBuilder = textConsoleBuilder

@@ -20,7 +20,7 @@ plugins {
 }
 
 intellij {
-    version "2021.1"
+    version "2020.3"
     plugins = ["java", "Kotlin"]
     updateSinceUntilBuild = false
 }

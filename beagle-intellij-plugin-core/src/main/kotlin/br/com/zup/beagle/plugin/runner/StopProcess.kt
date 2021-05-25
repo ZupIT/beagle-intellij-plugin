@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package br.com.zup.beagle.plugin.service
+package br.com.zup.beagle.plugin.runner
 
-import br.com.zup.beagle.plugin.runner.BeagleRunConfiguration
 import com.intellij.execution.impl.ExecutionManagerImpl
 import com.intellij.openapi.project.Project
 
-class StopRunning(private val project: Project) {
+object StopProcess {
 
-    private val executionManager = ExecutionManagerImpl.getInstance(this.project)
-
-    fun stopRunningCustomRunConfigurations() {
-        val descriptors = this.executionManager.getDescriptors {
+    fun stopRunningCustomRunConfigurations(project: Project) {
+        val executionManager = ExecutionManagerImpl.getInstance(project)
+        val descriptors = executionManager.getDescriptors {
             it.configuration is BeagleRunConfiguration
         }
         descriptors.forEach {

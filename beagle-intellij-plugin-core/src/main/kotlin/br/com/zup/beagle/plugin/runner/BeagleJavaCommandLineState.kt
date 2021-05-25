@@ -34,7 +34,6 @@ import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.task.ProjectTaskManager
 
-
 open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private val virtualFile: VirtualFile?, private val methodName: String?) : JavaCommandLineState(environment) {
 
     private val jsonConverterService = JsonConverterService.getInstance(this.environment.project)
