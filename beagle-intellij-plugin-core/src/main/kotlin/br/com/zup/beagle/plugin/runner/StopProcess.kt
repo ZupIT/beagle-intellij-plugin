@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package br.com.zup.beagle.plugin.util
+package br.com.zup.beagle.plugin.runner
 
-import com.intellij.openapi.util.IconLoader
-import javax.swing.Icon
+import com.intellij.execution.impl.ExecutionManagerImpl
+import com.intellij.openapi.project.Project
 
-open class BeagleIcons {
+object StopProcess {
 
-    companion object {
-        private fun load(path: String): Icon = IconLoader.getIcon(path, BeagleIcons::class.java)
-        val BEAGLE_ICON = load("/icons/plugin_icon.svg")
+    fun stopRunningCustomRunConfigurations(project: Project) {
+        val executionManager = ExecutionManagerImpl.getInstance(project)
+        val descriptors = executionManager.getDescriptors {
+            it.configuration is BeagleRunConfiguration
+        }
+        descriptors.forEach {
+            if (!it.processHandler!!.isProcessTerminated) {
+                it.processHandler!!.destroyProcess()
+            }
+        }
     }
 }

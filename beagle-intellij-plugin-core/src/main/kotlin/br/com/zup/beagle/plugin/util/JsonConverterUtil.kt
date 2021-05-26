@@ -33,10 +33,11 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiJavaFile
 import com.intellij.util.lang.UrlClassLoader
 import org.apache.commons.lang3.StringUtils
-import org.jetbrains.kotlin.idea.refactoring.toPsiFile
+import org.jetbrains.kotlin.idea.core.util.toPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.lang.reflect.Method
+import java.nio.file.Paths
 
 open class JsonConverterUtil(private val project: Project) {
 
@@ -52,7 +53,7 @@ open class JsonConverterUtil(private val project: Project) {
             if (this is ObjectNode && this.has("platform")) {
                 this.get("child").also {
                     this.removeAll()
-                    this.setAll(it as ObjectNode)
+                    this.setAll<JsonNode>(it as ObjectNode)
                 }
             }
             this.forEach { it.unwrapPlatform() }
@@ -96,6 +97,14 @@ open class JsonConverterUtil(private val project: Project) {
         OrderEnumerator.orderEntries(this.project).recursively().classes().pathsList.pathList
             .map { File(FileUtil.toSystemIndependentName(it)).toURI().toURL() }
     ).get()
+
+// The method below is an update to the new implementation of the getClassLoader method, as the urls method used in
+// the getClassLoader method has been discontinued in the intellij 2021.1 version.
+//
+//    private fun getClassLoader() = UrlClassLoader.build().files(
+//        OrderEnumerator.orderEntries(this.project).recursively().classes().pathsList.pathList
+//            .map { Paths.get(File(FileUtil.toSystemIndependentName(it)).toURI()) }
+//    ).get()
 
 
     private fun isValidMethodWithClassInstance(virtualFile: VirtualFile, psiFile: PsiFile, methodWithClassInstance: MethodWithClassInstance?, console: ConsoleView): Boolean {

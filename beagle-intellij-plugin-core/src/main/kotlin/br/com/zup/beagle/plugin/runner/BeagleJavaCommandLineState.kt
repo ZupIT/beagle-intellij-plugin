@@ -20,7 +20,6 @@ import br.com.zup.beagle.plugin.service.JsonConverterService
 import br.com.zup.beagle.plugin.service.PluginService
 import br.com.zup.beagle.plugin.socket.SocketServer
 import com.google.common.base.Charsets
-import com.intellij.compiler.impl.ProjectCompileScope
 import com.intellij.execution.ExecutionResult
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.JavaCommandLineState
@@ -31,14 +30,9 @@ import com.intellij.execution.runners.ProgramRunner
 import com.intellij.execution.ui.ConsoleView
 import com.intellij.execution.ui.ConsoleViewContentType
 import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.compiler.CompileContext
-import com.intellij.openapi.compiler.CompileStatusNotification
-import com.intellij.openapi.compiler.CompilerManager
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.task.ProjectTaskManager
-import com.intellij.task.ProjectTaskNotification
-
 
 open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private val virtualFile: VirtualFile?, private val methodName: String?) : JavaCommandLineState(environment) {
 
@@ -77,8 +71,8 @@ open class BeagleJavaCommandLineState(environment: ExecutionEnvironment, private
         }
 
     open fun compileAndExecuteJsonConverter() {
-        ProjectTaskManager.getInstance(this.environment.project).buildAllModules {
-            if (!it.isAborted && it.errors == 0) {
+        ProjectTaskManager.getInstance(this.environment.project).buildAllModules().onProcessed {
+            if (it.isAborted.not() and it.hasErrors().not()) {
                 this.jsonConverterService.buildDataAndSendToSocket(this.virtualFile, this.methodName, this.console!!)
             } else {
                 this.console!!.print("\nError on building project\n", ConsoleViewContentType.ERROR_OUTPUT)

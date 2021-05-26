@@ -16,7 +16,6 @@
 
 package br.com.zup.beagle.plugin.runner
 
-import br.com.zup.beagle.plugin.service.PluginService
 import com.intellij.execution.Executor
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ModuleBasedConfiguration
@@ -24,12 +23,12 @@ import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.filters.TextConsoleBuilderFactory
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.getOrCreate
 import org.jdom.Element
 import javax.swing.JCheckBox
+import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JTextField
 
@@ -42,16 +41,15 @@ open class BeagleRunConfiguration(project: Project, factory: ConfigurationFactor
         private const val HOT_RELOAD = "enableHotReload"
     }
 
-    private val pluginService = PluginService.getInstance(this.project)
     var clazzToRunPlugin: VirtualFile? = null
     var methodName: String? = null
     var enableHotReloadOnFileSaved: Boolean = true
     var javaCommandLineState: BeagleJavaCommandLineState? = null
 
-    override fun getConfigurationEditor() = BeagleSettingsEditor(this.project, JPanel(), TextFieldWithBrowseButton(), JTextField(), JCheckBox())
+    override fun getConfigurationEditor() = BeagleSettingsEditor(JPanel(), JTextField(), JCheckBox(), JLabel())
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
-        this.pluginService.stopRunningCustomRunConfigurations()
+        StopProcess.stopRunningCustomRunConfigurations(project)
         val commandLineState = BeagleJavaCommandLineState(environment, clazzToRunPlugin, methodName)
         val textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(this.project)
         commandLineState.consoleBuilder = textConsoleBuilder
