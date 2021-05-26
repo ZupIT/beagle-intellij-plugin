@@ -13,22 +13,13 @@
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="17e7a" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="clazzExplorer">
-        <constraints>
-          <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <focusable value="true"/>
-        </properties>
-      </component>
       <component id="55076" class="javax.swing.JLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <inheritsPopupMenu value="true"/>
-          <labelFor value="17e7a"/>
-          <text value="Class to run Plugin"/>
+          <text value="Class Name"/>
           <toolTipText value="Class"/>
         </properties>
       </component>
@@ -38,16 +29,6 @@
         </constraints>
         <properties>
           <text value="Method Name:"/>
-        </properties>
-      </component>
-      <component id="c54f0" class="javax.swing.JTextField" binding="methodNameInput">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-        </constraints>
-        <properties>
-          <toolTipText value="Method name"/>
         </properties>
       </component>
       <component id="ffa55" class="javax.swing.JLabel">
@@ -65,6 +46,24 @@
         </constraints>
         <properties>
           <text value=""/>
+        </properties>
+      </component>
+      <component id="65b3" class="javax.swing.JLabel" binding="labelClass">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="nameClass"/>
+        </properties>
+      </component>
+      <component id="c54f0" class="javax.swing.JTextField" binding="methodNameInput">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <toolTipText value="Method name"/>
         </properties>
       </component>
     </children>

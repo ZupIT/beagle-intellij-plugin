@@ -23,12 +23,12 @@ import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.filters.TextConsoleBuilderFactory
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.getOrCreate
 import org.jdom.Element
 import javax.swing.JCheckBox
+import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JTextField
 
@@ -46,7 +46,7 @@ open class BeagleRunConfiguration(project: Project, factory: ConfigurationFactor
     var enableHotReloadOnFileSaved: Boolean = true
     var javaCommandLineState: BeagleJavaCommandLineState? = null
 
-    override fun getConfigurationEditor() = BeagleSettingsEditor(this.project, JPanel(), TextFieldWithBrowseButton(), JTextField(), JCheckBox())
+    override fun getConfigurationEditor() = BeagleSettingsEditor(JPanel(), JTextField(), JCheckBox(), JLabel())
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
         StopProcess.stopRunningCustomRunConfigurations(project)
